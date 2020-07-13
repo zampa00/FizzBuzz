@@ -5,15 +5,23 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestFizzBuzz {
 
     FizzBuzz fizzBuzz;
+    private ArrayList<DivisorAndWord> numbersAndWords;
 
     @BeforeEach
     void setUp() {
-        fizzBuzz = new FizzBuzz();
+        numbersAndWords = new ArrayList<>();
+
+        numbersAndWords.add(new DivisorAndWord(3, "fizz"));
+        numbersAndWords.add(new DivisorAndWord(5, "buzz"));
+
+        fizzBuzz = new FizzBuzz(numbersAndWords);
     }
 
     @ParameterizedTest
@@ -22,21 +30,14 @@ public class TestFizzBuzz {
         assertEquals(number.toString(), fizzBuzz.convert(number));
     }
 
-    @ParameterizedTest
-    @ValueSource(ints = {3,6,18})
-    void testThreeDivisors(int number) {
-        assertEquals("fizz", fizzBuzz.convert(number));
+    @Test
+    void testSingleMatch() {
+        DivisorAndWord divisorAndWord = numbersAndWords.get(0);
+        assertEquals(divisorAndWord.getWord(), fizzBuzz.convert(divisorAndWord.getDivisor()));
     }
 
-    @ParameterizedTest
-    @ValueSource(ints = {5,10,20})
-    void testFiveDivisors(int number) {
-        assertEquals("buzz", fizzBuzz.convert(number));
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {15,30})
-    void testThreeAndFiveDivisors(int number) {
-        assertEquals("fizzbuzz", fizzBuzz.convert(number));
+    @Test
+    void testThreeAndFiveDivisors() {
+        assertEquals("fizzbuzz", fizzBuzz.convert(15));
     }
 }
